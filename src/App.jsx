@@ -1,5 +1,7 @@
+import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
+import TaskTable from "./components/TaskTable/TaskTable";
 
 function App() {
   return (
@@ -7,6 +9,8 @@ function App() {
       <div className="bg-[#191D26] font-[Inter] text-white">
         <Navbar />
         <Hero />
+        <TaskTable />
+        <Footer />
       </div>
     </>
   );
