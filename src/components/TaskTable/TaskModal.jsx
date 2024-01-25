@@ -40,7 +40,11 @@ export default function TaskModal({ onSave, taskToUpdate, onCloseClick }) {
   const handleSave = () => {
     if (isFormValid()) {
       onSave(task, isAdd);
-      toast.success("Task saved successfully!");
+      {
+        isAdd
+          ? toast.success("Task saved successfully!")
+          : toast.success("Task updated successfully!");
+      }
     } else {
       toast.error("Please fill in all required fields.");
     }

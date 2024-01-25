@@ -1,29 +1,19 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import Header from "./Header";
 import Table from "./Table";
 import { defaultTask } from "../../assets/data";
+import { taskReducer } from "../../reducers/taskReducer";
 import TaskModal from "./TaskModal";
 import EmptyList from "./EmptyList";
 
 export default function TaskTable() {
-  const [tasks, setTasks] = useState([defaultTask]);
+  const [tasks, dispatch] = useReducer(taskReducer, defaultTask);
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [taskToUpdate, setTaskToUpdate] = useState(null);
 
   function handleAddEditTask(newTask, isAdd) {
-    if (isAdd) {
-      setTasks([...tasks, newTask]);
-    } else {
-      setTasks(
-        tasks.map((task) => {
-          if (task.id === newTask.id) {
-            return newTask;
-          }
-          return task;
-        })
-      );
-    }
-
+    dispatch({ type: "addEditTask", newTask, isAdd });
     handleCloseClick();
   }
 
@@ -33,28 +23,15 @@ export default function TaskTable() {
   }
 
   function handleDeleteTask(taskId) {
-    const tasksAfterDelete = tasks.filter((task) => task.id !== taskId);
-    setTasks(tasksAfterDelete);
+    dispatch({ type: "deleteTask", taskId });
   }
 
   function handleDeleteAllClick() {
-    if (tasks.length > 0) {
-      alert("Are you sure you want to delete all items?");
-    }
-    tasks.length = 0;
-    setTasks([...tasks]);
+    dispatch({ type: "deleteAllTasks" });
   }
 
   function handleFavorite(taskId) {
-    setTasks(
-      tasks.map((task) => {
-        if (task.id === taskId) {
-          return { ...task, isFavorite: !task.isFavorite };
-        } else {
-          return task;
-        }
-      })
-    );
+    dispatch({ type: "toggleFavorite", taskId });
   }
 
   function handleCloseClick() {

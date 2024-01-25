@@ -1,30 +1,27 @@
-export default function taskReducer(tasks, action) {
+export const taskReducer = (tasks, action) => {
   switch (action.type) {
-    case "addTask": {
-      return [
-        ...tasks,
-        {
-          id: action.id,
-          text: action.text,
-          done: false,
-        },
-      ];
+    case "addEditTask": {
+      const updatedTasks = action.isAdd
+        ? [...tasks, action.newTask]
+        : tasks.map((task) =>
+            task.id === action.newTask.id ? action.newTask : task
+          );
+      return updatedTasks;
     }
-    case "changed": {
-      return tasks.map((t) => {
-        if (t.id === action.task.id) {
-          return action.task;
-        } else {
-          return t;
-        }
-      });
-    }
-    case "deleted": {
-      return tasks.filter((t) => t.id !== action.id);
-    }
-
-    default: {
-      throw Error(`No action matched with ${action.type}`);
-    }
+    case "deleteTask":
+      return tasks.filter((task) => task.id !== action.taskId);
+    case "deleteAllTasks":
+      if (tasks.length > 0) {
+        alert("Are you sure you want to delete all items?");
+      }
+      return [];
+    case "toggleFavorite":
+      return tasks.map((task) =>
+        task.id === action.taskId
+          ? { ...task, isFavorite: !task.isFavorite }
+          : task
+      );
+    default:
+      return tasks;
   }
-}
+};
