@@ -1,3 +1,4 @@
+import { defaultTask } from "../assets/data";
 export const taskReducer = (tasks, action) => {
   switch (action.type) {
     case "addEditTask": {
@@ -21,6 +22,15 @@ export const taskReducer = (tasks, action) => {
           ? { ...task, isFavorite: !task.isFavorite }
           : task
       );
+    case "searchTask": {
+      const { searchTerm } = action;
+      const filtered = tasks.filter((task) =>
+        task.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      return filtered;
+    }
+    case "resetTasks":
+      return defaultTask;
     default:
       return tasks;
   }

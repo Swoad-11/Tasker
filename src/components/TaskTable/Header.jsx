@@ -1,14 +1,20 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { TaskDispatchContext } from "../../contexts/TaskContext";
 
 export default function Header({ onAddClick }) {
   const dispatch = useContext(TaskDispatchContext);
+  const [searchTerm, setSearchTerm] = useState("");
+
   return (
     <>
       <div className="mb-14 items-center justify-between sm:flex">
         <h2 className="text-2xl font-semibold max-sm:mb-4">Your Tasks</h2>
         <div className="flex items-center space-x-5">
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <div className="flex">
               <div className="relative overflow-hidden rounded-lg text-gray-50 md:min-w-[380px] lg:min-w-[440px]">
                 <input
@@ -16,7 +22,19 @@ export default function Header({ onAddClick }) {
                   id="search-dropdown"
                   className="z-20 block w-full bg-gray-800 px-4 py-2 pr-10 focus:outline-none"
                   placeholder="Search Task"
-                  required
+                  value={searchTerm}
+                  onChange={(e) => {
+                    const newSearchTerm = e.target.value;
+                    setSearchTerm(newSearchTerm);
+                    if (newSearchTerm === "") {
+                      dispatch({ type: "resetTasks" });
+                    } else {
+                      dispatch({
+                        type: "searchTask",
+                        searchTerm: newSearchTerm,
+                      });
+                    }
+                  }}
                 />
                 <button
                   type="submit"
