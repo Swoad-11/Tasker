@@ -38,6 +38,9 @@ export default function TaskTable() {
   }
 
   function handleDeleteAllClick() {
+    if (tasks.length > 0) {
+      alert("Are you sure you want to delete all items?");
+    }
     tasks.length = 0;
     setTasks([...tasks]);
   }

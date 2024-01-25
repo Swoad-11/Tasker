@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function TaskModal({ onSave, taskToUpdate, onCloseClick }) {
   const [task, setTask] = useState(
@@ -14,9 +16,9 @@ export default function TaskModal({ onSave, taskToUpdate, onCloseClick }) {
 
   const [isAdd, setIsAdd] = useState(Object.is(taskToUpdate, null));
 
-  const handleChange = (evt) => {
-    const name = evt.target.name;
-    let value = evt.target.value;
+  const handleChange = (e) => {
+    const name = e.target.name;
+    let value = e.target.value;
     if (name === "tags") {
       value = value.split(",");
     }
@@ -25,6 +27,25 @@ export default function TaskModal({ onSave, taskToUpdate, onCloseClick }) {
       [name]: value,
     });
   };
+
+  const isFormValid = () => {
+    return (
+      task.title.trim() !== "" &&
+      task.description.trim() !== "" &&
+      task.tags.length > 0 &&
+      task.priority !== ""
+    );
+  };
+
+  const handleSave = () => {
+    if (isFormValid()) {
+      onSave(task, isAdd);
+      toast.success("Task saved successfully!");
+    } else {
+      toast.error("Please fill in all required fields.");
+    }
+  };
+
   return (
     <>
       <div className="bg-black bg-opacity-70 h-full w-full z-10 absolute top-0 left-0"></div>
@@ -104,9 +125,9 @@ export default function TaskModal({ onSave, taskToUpdate, onCloseClick }) {
             Close
           </button>
           <button
-            type="submit"
-            className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
-            onClick={() => onSave(task, isAdd)}
+            type="button"
+            className={`rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80`}
+            onClick={handleSave}
           >
             Save
           </button>
