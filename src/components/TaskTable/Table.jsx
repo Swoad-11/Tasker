@@ -1,7 +1,10 @@
+import { useContext } from "react";
 import Tags from "./Tags";
 import { FaStar } from "react-icons/fa";
+import { TaskDispatchContext } from "../../contexts/TaskContext";
 
-export default function Table({ tasks, onEdit, onDelete, onFav }) {
+export default function Table({ tasks, onEdit }) {
+  const dispatch = useContext(TaskDispatchContext);
   return (
     <>
       <div className="overflow-auto">
@@ -38,7 +41,14 @@ export default function Table({ tasks, onEdit, onDelete, onFav }) {
                 className="border-b border-[#2E3443] [&>td]:align-baseline [&>td]:px-4 [&>td]:py-2"
               >
                 <td>
-                  <button onClick={() => onFav(task.id)}>
+                  <button
+                    onClick={() =>
+                      dispatch({
+                        type: "toggleFavorite",
+                        taskId: task.id,
+                      })
+                    }
+                  >
                     {task.isFavorite ? (
                       <FaStar color="yellow" />
                     ) : (
@@ -52,7 +62,7 @@ export default function Table({ tasks, onEdit, onDelete, onFav }) {
                 </td>
                 <td>
                   <ul className="flex justify-center gap-1.5 flex-wrap">
-                    {task.tags.map((tag) => (
+                    {task?.tags?.map((tag) => (
                       <Tags key={tag} tag={tag} />
                     ))}
                   </ul>
@@ -62,7 +72,9 @@ export default function Table({ tasks, onEdit, onDelete, onFav }) {
                   <div className="flex items-center justify-center space-x-3">
                     <button
                       className="text-red-500"
-                      onClick={() => onDelete(task.id)}
+                      onClick={() =>
+                        dispatch({ type: "deleteTask", taskId: task.id })
+                      }
                     >
                       Delete
                     </button>

@@ -1,4 +1,8 @@
-export default function Header({ onAddClick, onDeleteAllClick }) {
+import { useContext } from "react";
+import { TaskDispatchContext } from "../../contexts/TaskContext";
+
+export default function Header({ onAddClick }) {
+  const dispatch = useContext(TaskDispatchContext);
   return (
     <>
       <div className="mb-14 items-center justify-between sm:flex">
@@ -46,7 +50,7 @@ export default function Header({ onAddClick, onDeleteAllClick }) {
           </button>
           <button
             className="rounded-md bg-red-500 px-3.5 py-2.5 text-sm font-semibold"
-            onClick={onDeleteAllClick}
+            onClick={() => dispatch({ type: "deleteAllTasks" })}
           >
             Delete All
           </button>

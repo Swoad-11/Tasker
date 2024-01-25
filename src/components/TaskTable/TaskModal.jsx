@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { TaskDispatchContext } from "../../contexts/TaskContext";
 
-export default function TaskModal({ onSave, taskToUpdate, onCloseClick }) {
+export default function TaskModal({ taskToUpdate, onCloseClick }) {
+  const dispatch = useContext(TaskDispatchContext);
   const [task, setTask] = useState(
     taskToUpdate || {
       id: crypto.randomUUID(),
@@ -39,12 +41,11 @@ export default function TaskModal({ onSave, taskToUpdate, onCloseClick }) {
 
   const handleSave = () => {
     if (isFormValid()) {
-      onSave(task, isAdd);
-      {
-        isAdd
-          ? toast.success("Task saved successfully!")
-          : toast.success("Task updated successfully!");
-      }
+      dispatch({ type: "addEditTask", newTask: task, isAdd });
+      toast.success(
+        isAdd ? "Task saved successfully!" : "Task updated successfully!"
+      );
+      onCloseClick();
     } else {
       toast.error("Please fill in all required fields.");
     }
@@ -131,7 +132,9 @@ export default function TaskModal({ onSave, taskToUpdate, onCloseClick }) {
           <button
             type="button"
             className={`rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80`}
-            onClick={handleSave}
+            onClick={() => {
+              handleSave();
+            }}
           >
             Save
           </button>
