@@ -5,6 +5,7 @@ import { TaskDispatchContext } from "../../contexts/TaskContext";
 
 export default function Table({ tasks, onEdit }) {
   const dispatch = useContext(TaskDispatchContext);
+
   return (
     <>
       <div className="overflow-auto">

@@ -9,7 +9,6 @@ import { defaultTask } from "../../assets/data";
 
 export default function TaskTable() {
   const [tasks, dispatch] = useReducer(taskReducer, defaultTask);
-
   const [showAddModal, setShowAddModal] = useState(false);
   const [taskToUpdate, setTaskToUpdate] = useState(null);
 
@@ -36,6 +35,7 @@ export default function TaskTable() {
           <div className="container mx-auto">
             <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
               <Header onAddClick={() => setShowAddModal(true)} />
+
               {tasks.length > 0 ? (
                 <Table tasks={tasks} onEdit={handleEditTask} />
               ) : (
